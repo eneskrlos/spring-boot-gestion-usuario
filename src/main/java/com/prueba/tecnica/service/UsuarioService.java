@@ -1,0 +1,69 @@
+package com.prueba.tecnica.service;
+
+
+import java.util.Optional;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import com.prueba.tecnica.dao.IUsuarioDAO;
+import com.prueba.tecnica.model.Usuario;
+import com.prueba.tecnica.util.response.UserResponse;
+import com.prueba.tecnica.utilencrypt.EncryptService;
+
+@Service
+public class UsuarioService   {
+
+	@Autowired
+	private IUsuarioDAO userdao;
+	
+	@Bean
+	EncryptService encode() {
+		EncryptService es = new EncryptService();
+		return es;
+	}
+	
+	public ResponseEntity<UserResponse> addUsuario(Usuario usernew) {
+		try {
+			Usuario aux = usernew;
+			aux.setEstado(true);
+			aux.setPassword(encode().encryptarPassword(usernew.getPassword()));
+			Usuario creado =  userdao.save(aux);
+			UserResponse ur = null;
+			return ResponseEntity.ok(mappearDatos(creado, ur));
+		} catch (Exception e) {
+			 return ResponseEntity.badRequest().build();
+		}
+		
+	}
+	
+	public ResponseEntity<String> deleteUsuario(int id) {
+		try {
+			Optional<Usuario> userfind = userdao.findById(id);
+			if(userfind.isPresent()) {
+				Usuario aux = userfind.get();
+				aux.setEstado(false);
+				userdao.save(aux);
+				return ResponseEntity.ok("Ok");
+			}else {
+				return ResponseEntity.notFound().build();
+			}
+		} catch (Exception e) {
+			 return ResponseEntity.badRequest().build();
+		}
+		
+	}	
+	
+	private UserResponse mappearDatos(Usuario contenedor, UserResponse index) {
+		index.setId(contenedor.getId());
+		index.setName(contenedor.getName());
+		index.setUsername(contenedor.getUsername());
+		index.setEstado(index.isEstado());
+		return index;
+	}
+	
+	
+}
