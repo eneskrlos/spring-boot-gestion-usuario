@@ -1,11 +1,14 @@
 package com.prueba.tecnica.model;
 
 import java.util.ArrayList;
+
 import java.util.List;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +43,7 @@ public class Usuario {
 	
 	private boolean estado;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(
 			name="user_rol",
 			joinColumns = @JoinColumn(name="user_id"),
@@ -104,7 +107,8 @@ public class Usuario {
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
-	
+
+
 	public List<Rol> getUser_rol() {
 		return user_rol;
 	}
@@ -113,8 +117,8 @@ public class Usuario {
 	public void setUser_rol(List<Rol> user_rol) {
 		this.user_rol = user_rol;
 	}
-	
-	
-	
+
+
+
 	
 }

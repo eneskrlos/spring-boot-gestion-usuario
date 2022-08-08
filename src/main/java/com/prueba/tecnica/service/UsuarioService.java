@@ -1,6 +1,9 @@
 package com.prueba.tecnica.service;
 
 
+import java.util.ArrayList;
+
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,6 +27,20 @@ public class UsuarioService   {
 	EncryptService encode() {
 		EncryptService es = new EncryptService();
 		return es;
+	}
+	
+	public ResponseEntity<List<UserResponse>> listUser(){
+		try {
+			List<Usuario> listiuser = userdao.findAll();
+			List<UserResponse> response = new ArrayList<>();
+			for (int i = 0; i < listiuser.size(); i++) {
+				UserResponse ur = null;
+				response.add(mappearDatos(listiuser.get(i), ur));
+			}
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 	
 	public ResponseEntity<UserResponse> addUsuario(Usuario usernew) {

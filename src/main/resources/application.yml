@@ -13,3 +13,8 @@ Spring:
     url: jdbc:mysql://localhost:3306/pruebatecnica  
     username: root
     password: root 
+    
+  security:   
+    user:
+      name: ernes
+      password: 123456 

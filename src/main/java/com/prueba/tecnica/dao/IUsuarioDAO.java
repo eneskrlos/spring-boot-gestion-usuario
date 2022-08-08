@@ -9,5 +9,5 @@ import com.prueba.tecnica.model.Usuario;
 
 public interface IUsuarioDAO extends JpaRepository<Usuario, Integer> {
 
-	
+	Usuario findByUsername(String username);
 }
